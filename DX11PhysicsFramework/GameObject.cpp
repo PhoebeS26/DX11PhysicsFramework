@@ -49,4 +49,6 @@ void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 	pImmediateContext->IASetIndexBuffer(_geometry.indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	pImmediateContext->DrawIndexed(_geometry.numberOfIndices, 0, 0);
+
+	//test
 }
