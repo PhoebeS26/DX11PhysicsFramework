@@ -513,28 +513,35 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	noSpecMaterial.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	noSpecMaterial.specular = XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	GameObject* gameObject = new GameObject("Floor", planeGeometry, noSpecMaterial);
-	gameObject->SetPosition(0.0f, 0.0f, 0.0f);
-	gameObject->SetScale(15.0f, 15.0f, 15.0f);
-	gameObject->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
+	Transform* floorTransform = new Transform();
+	floorTransform->SetPosition(0.0f, 0.0f, 0.0f);
+	floorTransform->SetScale(15.0f, 15.0f, 15.0f);
+	floorTransform->SetRotation(XMConvertToRadians(90.0f), 0.0f, 0.0f);
+
+	GameObject* gameObject = new GameObject("Floor", planeGeometry, noSpecMaterial, floorTransform);
 	gameObject->SetTextureRV(_GroundTextureRV);
 
 	_gameObjects.push_back(gameObject);
 
 	for (auto i = 0; i < 4; i++)
 	{
-		gameObject = new GameObject("Cube " + i, cubeGeometry, shinyMaterial);
-		gameObject->SetScale(1.0f, 1.0f, 1.0f);
-		gameObject->SetPosition(-2.0f + (i * 2.5f), 1.0f, 10.0f);
+		Transform* cubeTransform = new Transform();
+		cubeTransform->SetScale(1.0f, 1.0f, 1.0f);
+		cubeTransform->SetPosition(-2.0f + (i * 2.5f), 1.0f, 10.0f);
+
+		gameObject = new GameObject("Cube " + i, cubeGeometry, shinyMaterial, cubeTransform);
 		gameObject->SetTextureRV(_StoneTextureRV);
 
 		_gameObjects.push_back(gameObject);
 	}
 
-	gameObject = new GameObject("Donut", herculesGeometry, shinyMaterial);
-	gameObject->SetScale(1.0f, 1.0f, 1.0f);
-	gameObject->SetPosition(-5.0f, 0.5f, 10.0f);
+	Transform* donutTransform = new Transform();
+	donutTransform->SetScale(1.0f, 1.0f, 1.0f);
+	donutTransform->SetPosition(-5.0f, 0.5f, 10.0f);
+
+	gameObject = new GameObject("Donut", herculesGeometry, shinyMaterial, donutTransform);
 	gameObject->SetTextureRV(_StoneTextureRV);
+
 	_gameObjects.push_back(gameObject);
 
 	return S_OK;
