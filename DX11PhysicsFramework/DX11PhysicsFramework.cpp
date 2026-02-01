@@ -1,4 +1,5 @@
 #include "DX11PhysicsFramework.h"
+#include "Debug.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -737,5 +738,8 @@ void DX11PhysicsFramework::Draw()
     //
     // Present our back buffer to our front buffer
     //
+
+	Debug::Print("MEGATEST");
+
     _swapChain->Present(0, 0);
 }

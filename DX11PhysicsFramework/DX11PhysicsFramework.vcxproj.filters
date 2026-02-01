@@ -30,6 +30,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Appearance.h" />
+    <ClInclude Include="Debug.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11PhysicsFramework.cpp" />
