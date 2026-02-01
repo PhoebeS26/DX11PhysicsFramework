@@ -18,28 +18,7 @@ GameObject::~GameObject()
 
 void GameObject::Update(float dt)
 {
-	// Calculate world matrix
-	XMMATRIX scale = XMMatrixScaling(_transform->GetScale().x, _transform->GetScale().y, _transform->GetScale().z);
-	XMMATRIX rotation = XMMatrixRotationX(_transform->GetRotation().x) * XMMatrixRotationY(_transform->GetRotation().y) * XMMatrixRotationZ(_transform->GetRotation().z);
-	XMMATRIX translation = XMMatrixTranslation(_transform->GetPosition().x, _transform->GetPosition().y, _transform->GetPosition().z);
-
-	XMStoreFloat4x4(&_world, scale * rotation * translation);
-
-	if (_parent != nullptr)
-	{
-		XMStoreFloat4x4(&_world, this->GetWorldMatrix() * _parent->GetWorldMatrix());
-	}
-}
-
-void GameObject::Move(XMFLOAT3 direction)
-{
-	Vector3 pos = _transform->GetPosition();
-
-	pos.x += direction.x;
-	pos.y += direction.y;
-	pos.z += direction.z;
-
-	_transform->SetPosition(pos);
+	_transform->UpdateWorldMatrix();
 }
 
 void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
