@@ -1,19 +1,20 @@
 #include "GameObject.h"
 
-GameObject::GameObject(string type, Geometry geometry, Material material, Transform* transform) : _geometry(geometry), _type(type), _material(material)
+GameObject::GameObject(string type,  Appearance* appearance, Transform* transform ) : _type(type), _appearance(appearance), _transform(transform)
 {
 	_parent = nullptr;
 	_transform = transform;
-
-	_textureRV = nullptr;
+	_appearance = appearance;
 }
 
 GameObject::~GameObject()
 {
+	delete _transform;
+	delete _appearance;
+
 	_parent = nullptr;
-	_textureRV = nullptr;
-	_geometry.indexBuffer = nullptr;
-	_geometry.vertexBuffer = nullptr;
+	_transform = nullptr;
+	_appearance = nullptr;
 }
 
 void GameObject::Update(float dt)
@@ -23,13 +24,11 @@ void GameObject::Update(float dt)
 
 void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 {
-	// We are assuming that the constant buffers and all other draw setup has already taken place
+	Geometry geo = _appearance->GetGeometry();
 
-	// Set vertex and index buffers
-	pImmediateContext->IASetVertexBuffers(0, 1, &_geometry.vertexBuffer, &_geometry.vertexBufferStride, &_geometry.vertexBufferOffset);
-	pImmediateContext->IASetIndexBuffer(_geometry.indexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	pImmediateContext->IASetVertexBuffers(0, 1, &geo.vertexBuffer, &geo.vertexBufferStride, &geo.vertexBufferOffset);
+	pImmediateContext->IASetIndexBuffer(geo.indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
-	pImmediateContext->DrawIndexed(_geometry.numberOfIndices, 0, 0);
+	pImmediateContext->DrawIndexed(geo.numberOfIndices, 0, 0);
 
-	//test
 }
