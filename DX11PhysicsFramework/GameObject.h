@@ -19,20 +19,19 @@ public:
 	Transform* GetTransform() const { return _transform; }
 	Appearance* GetAppearance() const { return _appearance; }
 
-
 	string GetType() const { return _type; }
 
-
 	void SetParent(GameObject * parent) { _parent = parent; }
-
 
 	void Update(float dt);
 	void Draw(ID3D11DeviceContext * pImmediateContext);
 
 private:
+
 	GameObject* _parent = nullptr;
 	Transform* _transform;
 	Appearance* _appearance;
+
 
 	string _type;
 
