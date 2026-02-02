@@ -560,6 +560,9 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 	_gameObjects.push_back(gameObject);
 
+	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 1.0f, 0.0f));
+
+
 	return S_OK;
 }
 
@@ -648,7 +651,7 @@ void DX11PhysicsFramework::Update()
 	_camera->SetPosition(cameraPos);
 	_camera->Update();
 
-	Debug::DebugPrintF("deltaTime is %f \n the number is %i \n", accumulator, 2);
+	//Debug::DebugPrintF("deltaTime is %f \n the number is %i \n", accumulator, 2);
 
 	// Debug cube 1 position 
 	Vector3 cubePos = _gameObjects[1]->GetTransform()->GetPosition();

@@ -5,12 +5,14 @@ GameObject::GameObject(string type,  Appearance* appearance, Transform* transfor
 	_parent = nullptr;
 	_transform = transform;
 	_appearance = appearance;
+	_physicsModel = new PhysicsModel(_transform);
 }
 
 GameObject::~GameObject()
 {
 	delete _transform;
 	delete _appearance;
+	delete _physicsModel;
 
 	_parent = nullptr;
 	_transform = nullptr;
@@ -19,7 +21,15 @@ GameObject::~GameObject()
 
 void GameObject::Update(float dt)
 {
-	_transform->UpdateWorldMatrix();
+	if (_physicsModel) 
+	{
+		_physicsModel->Update(dt);
+	}
+
+	if (_transform) 
+	{
+		_transform->UpdateWorldMatrix();
+	}
 }
 
 void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)

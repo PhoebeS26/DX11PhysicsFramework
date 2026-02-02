@@ -5,6 +5,8 @@
 #include <string>
 #include "Transform.h"
 #include "Appearance.h"
+#include "PhysicsModel.h"
+
 
 using namespace DirectX;
 using namespace std;
@@ -19,6 +21,8 @@ public:
 
 	Transform* GetTransform() const { return _transform; }
 	Appearance* GetAppearance() const { return _appearance; }
+	PhysicsModel* GetPhysicsModel() { return _physicsModel; }
+
 
 	string GetType() const { return _type; }
 
@@ -32,6 +36,7 @@ private:
 	GameObject* _parent = nullptr;
 	Transform* _transform;
 	Appearance* _appearance;
+	PhysicsModel* _physicsModel;
 
 	string _type;
 
