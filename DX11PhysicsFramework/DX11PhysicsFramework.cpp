@@ -739,7 +739,9 @@ void DX11PhysicsFramework::Draw()
     // Present our back buffer to our front buffer
     //
 
-	Debug::Print("MEGATEST");
+	Vector3 cubePos = _gameObjects[1]->GetTransform()->GetPosition();
+
+	Debug::Print("Cube 1 Pos", cubePos);
 
     _swapChain->Present(0, 0);
 }

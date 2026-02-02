@@ -13,6 +13,7 @@ using namespace std;
 class GameObject
 {
 public:
+
 	GameObject(string type, Appearance* appearance, Transform* transform);
 	~GameObject();
 
@@ -31,7 +32,6 @@ private:
 	GameObject* _parent = nullptr;
 	Transform* _transform;
 	Appearance* _appearance;
-
 
 	string _type;
 
