@@ -648,6 +648,7 @@ void DX11PhysicsFramework::Update()
 	_camera->SetPosition(cameraPos);
 	_camera->Update();
 
+	Debug::DebugPrintF("deltaTime is %f \n the number is %i \n", accumulator, 2);
 
 	// Debug cube 1 position 
 	Vector3 cubePos = _gameObjects[1]->GetTransform()->GetPosition();
