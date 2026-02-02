@@ -561,6 +561,10 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects.push_back(gameObject);
 
 	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 1.0f, 0.0f));
+	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
+	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(true);
+
+	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 1.0f, 0.0f));
 
 
 	return S_OK;
