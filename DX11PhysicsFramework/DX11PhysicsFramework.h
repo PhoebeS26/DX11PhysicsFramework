@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Structures.h"
 #include "OBJLoader.h"
+#include "Timer.h"
 
 #include <vector>
 
@@ -20,6 +21,8 @@ using namespace DirectX;
 class DX11PhysicsFramework
 {
 private:
+
+	Timer* _timer = nullptr;
 
 	int _WindowWidth = 1280;
 	int _WindowHeight = 768;

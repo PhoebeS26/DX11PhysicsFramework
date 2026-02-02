@@ -1,5 +1,6 @@
 #include "DX11PhysicsFramework.h"
 #include "Debug.h"
+#define FPS60 1.0f/60.0f
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -452,6 +453,8 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 {
 	HRESULT hr = S_OK;
 
+	_timer = new Timer();
+
 	D3D11_BUFFER_DESC constantBufferDesc = {};
 	constantBufferDesc.ByteWidth = sizeof(ConstantBuffer);
 	constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -603,70 +606,54 @@ DX11PhysicsFramework::~DX11PhysicsFramework()
 
 void DX11PhysicsFramework::Update()
 {
-	//Static initializes this value only once    
-	static ULONGLONG frameStart = GetTickCount64();
+	// Update Timer
+	_timer->Tick();
+	float deltaTime = _timer->GetDeltaTime();
 
-	ULONGLONG frameNow = GetTickCount64();
-	float deltaTime = (frameNow - frameStart) / 1000.0f;
-	frameStart = frameNow;
+	static float accumulator = 0.0f;
+	accumulator += deltaTime;
 
-	static float simpleCount = 0.0f;
-	simpleCount += deltaTime;
+	while (accumulator >= FPS60)
+	{
+		// Move GameObjects
+		if (GetAsyncKeyState('1')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
+		if (GetAsyncKeyState('2')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
+		if (GetAsyncKeyState('3')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
+		if (GetAsyncKeyState('4')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
 
-	// Move gameobjects
-	if (GetAsyncKeyState('1'))
-	{
-		_gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
-	}
-	if (GetAsyncKeyState('2'))
-	{
-		_gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
-	}
-	if (GetAsyncKeyState('3'))
-	{
-		_gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
-	}
-	if (GetAsyncKeyState('4'))
-	{
-		_gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
-	}
+		if (GetAsyncKeyState('5')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
+		if (GetAsyncKeyState('6')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
+		if (GetAsyncKeyState('7')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
+		if (GetAsyncKeyState('8')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
 
-	if (GetAsyncKeyState('5'))
-	{
-		_gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
-	}
-	if (GetAsyncKeyState('6'))
-	{
-		_gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
-	}
-	if (GetAsyncKeyState('7'))
-	{
-		_gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
-	}
-	if (GetAsyncKeyState('8'))
-	{
-		_gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
+		for (auto gameObject : _gameObjects)
+		{
+			gameObject->Update(FPS60);
+		}
+
+		Debug::Print("Fixed Delta Time", FPS60);
+
+		accumulator -= FPS60;
+
 	}
 
-	// Update camera
+	// Update camera position 
 	float angleAroundZ = XMConvertToRadians(_cameraOrbitAngleXZ);
-
 	float x = _cameraOrbitRadius * cos(angleAroundZ);
 	float z = _cameraOrbitRadius * sin(angleAroundZ);
 
 	XMFLOAT3 cameraPos = _camera->GetPosition();
 	cameraPos.x = x;
 	cameraPos.z = z;
-
 	_camera->SetPosition(cameraPos);
 	_camera->Update();
 
-	// Update objects
-	for (auto gameObject : _gameObjects)
-	{
-		gameObject->Update(deltaTime);
-	}
+
+	// Debug cube 1 position 
+	Vector3 cubePos = _gameObjects[1]->GetTransform()->GetPosition();
+	// Debug::Print("Cube 1 Position", cubePos);
 }
+
 
 void DX11PhysicsFramework::Draw()
 {
@@ -738,10 +725,6 @@ void DX11PhysicsFramework::Draw()
     //
     // Present our back buffer to our front buffer
     //
-
-	Vector3 cubePos = _gameObjects[1]->GetTransform()->GetPosition();
-
-	Debug::Print("Cube 1 Pos", cubePos);
 
     _swapChain->Present(0, 0);
 }
