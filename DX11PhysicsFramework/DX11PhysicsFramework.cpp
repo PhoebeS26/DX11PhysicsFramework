@@ -560,11 +560,11 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 	_gameObjects.push_back(gameObject);
 
-	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 1.0f, 0.0f));
+	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
-	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(true);
+	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
 
-	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 1.0f, 0.0f));
+	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 
 
 	return S_OK;
@@ -623,15 +623,15 @@ void DX11PhysicsFramework::Update()
 	while (accumulator >= FPS60)
 	{
 		// Move GameObjects
-		if (GetAsyncKeyState('1')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
-		if (GetAsyncKeyState('2')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
-		if (GetAsyncKeyState('3')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
-		if (GetAsyncKeyState('4')) _gameObjects[1]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
+		if (GetAsyncKeyState('1')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
+		if (GetAsyncKeyState('2')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
+		if (GetAsyncKeyState('3')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
+		if (GetAsyncKeyState('4')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
-		if (GetAsyncKeyState('5')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, -0.02f));
-		if (GetAsyncKeyState('6')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0, 0.02f));
-		if (GetAsyncKeyState('7')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, 0.02f, 0));
-		if (GetAsyncKeyState('8')) _gameObjects[2]->GetTransform()->Move(XMFLOAT3(0, -0.02f, 0));
+		if (GetAsyncKeyState('5')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
+		if (GetAsyncKeyState('6')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
+		if (GetAsyncKeyState('7')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
+		if (GetAsyncKeyState('8')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
 		for (auto gameObject : _gameObjects)
 		{

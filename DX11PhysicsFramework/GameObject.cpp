@@ -5,7 +5,7 @@ GameObject::GameObject(string type,  Appearance* appearance, Transform* transfor
 	_parent = nullptr;
 	_transform = transform;
 	_appearance = appearance;
-	_physicsModel = new PhysicsModel(_transform);
+	_physicsModel = new PhysicsModel(_transform, 1.0f);
 }
 
 GameObject::~GameObject()
