@@ -1,4 +1,5 @@
 #include "DX11PhysicsFramework.h"
+#include "ParticleModel.h"
 #include "Debug.h"
 #define FPS60 1.0f/60.0f
 
@@ -563,6 +564,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
+	_gameObjects[1]->GetPhysicsModel()->SetUseGravity(true);
 
 	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 
@@ -654,6 +656,9 @@ void DX11PhysicsFramework::Update()
 	cameraPos.z = z;
 	_camera->SetPosition(cameraPos);
 	_camera->Update();
+
+
+
 
 	//Debug::DebugPrintF("deltaTime is %f \n the number is %i \n", accumulator, 2);
 

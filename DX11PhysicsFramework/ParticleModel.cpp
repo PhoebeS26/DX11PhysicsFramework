@@ -9,5 +9,3 @@ void ParticleModel::Update(float deltaTime)
 {
 	PhysicsModel::Update(deltaTime);
 }
-
-

@@ -14,6 +14,21 @@ void PhysicsModel::Update(float deltaTime)
 {
     if (!_transform) return;
 
+
+    Vector3 pos = _transform->GetPosition();
+
+    if (pos.y <= 0.5f)  
+    {
+        _useGravity = false;
+        _useFriction = true;
+    }
+
+    // Apply gravity force
+    if (_useGravity)
+    {
+        AddForce(GravityForce());
+    }
+
     // F = M * A ? A = F / M
     _acceleration += _netForce / _mass;
 
@@ -33,8 +48,13 @@ void PhysicsModel::Update(float deltaTime)
 void PhysicsModel::AddForce(const Vector3& force) 
 {
     _netForce += force;
-
 }
+
+Vector3 PhysicsModel::GravityForce() const
+{
+    return Vector3(0.0f, -9.81f * _mass, 0.0f);
+}
+
 
 
 

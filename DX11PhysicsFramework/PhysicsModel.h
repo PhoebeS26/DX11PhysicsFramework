@@ -14,11 +14,16 @@ protected:
     Vector3 _netForce;
     float _mass = 1.0f;
 
+    bool _useGravity = false;
+    bool _useFriction = false;
+
+
 public:
 
     PhysicsModel(Transform* transform, float mass);   
 
-    virtual void Update(float deltaTime);         
+    virtual void Update(float deltaTime);      
+    void AddForce(const Vector3& force);
 
     Vector3 GetVelocity() const { return _velocity; }
     void SetVelocity(const Vector3& velocity) { _velocity = velocity; }
@@ -29,10 +34,13 @@ public:
     void SetUseAcceleration(bool useAccel) { _useAcceleration = useAccel; }
     bool GetUseAcceleration() const { return _useAcceleration; }
 
-    void AddForce(const Vector3& force) { _netForce += force; };
-
     void SetMass(float mass) { _mass = mass; }
     float GetMass() const { return _mass; }
+
+    Vector3 GravityForce() const;
+    void SetUseGravity(bool use) { _useGravity = use; }
+    bool GetUseGravity() const { return _useGravity; }
+
 
 
 };
