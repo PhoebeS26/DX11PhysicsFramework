@@ -19,13 +19,13 @@ void PhysicsModel::Update(float deltaTime)
 
     if (pos.y <= 0.5f)
     {
-        _transform->SetPosition(Vector3(pos.x, 0.5f, pos.z)); // snap to ground
-        _velocity.y = 0; // stop downward velocity
+        _transform->SetPosition(Vector3(pos.x, 0.5f, pos.z));
+        _velocity.y = 0; 
         _useFriction = true;
     }
     else
     {
-        _useGravity = true; // allow gravity above ground
+        _useGravity = true; 
         _useFriction = false;
     }
 
@@ -95,7 +95,7 @@ Vector3 PhysicsModel::DragForce()
     dragDir.Reverse();  // opposite to velocity
 
     const float airDensity = 1.225f;
-    const float dragCoefficient = 0.47f; // sphere-ish
+    const float dragCoefficient = 0.47f; 
     const float area = 1.0f;
 
     float dragMagnitude = 0.5f * airDensity * dragCoefficient * area * speed * speed;

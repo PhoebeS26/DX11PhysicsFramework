@@ -1,6 +1,8 @@
 #include "DX11PhysicsFramework.h"
 #include "ParticleModel.h"
+#include "RigidBodyModel.h"
 #include "Debug.h"
+
 #define FPS60 1.0f/60.0f
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -543,7 +545,11 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		cubeAppearance->SetMaterial(shinyMaterial);
 		cubeAppearance->SetTextureRV(_StoneTextureRV);
 
-		gameObject = new GameObject("Cube " + to_string(i), cubeAppearance, cubeTransform);
+		GameObject* gameObject = new GameObject("Cube " + to_string(i), cubeAppearance, cubeTransform);
+
+		// Create RigidBodyModel for the cube
+		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 1.0f); // mass = 1.0f
+		gameObject->SetPhysicsModel(rigidBody); // use your setter
 
 		_gameObjects.push_back(gameObject);
 	}
