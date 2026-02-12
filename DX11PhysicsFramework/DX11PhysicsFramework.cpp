@@ -564,7 +564,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	for (int i = 0; i < 10; i++)
 	{
 		Transform* t = new Transform();
-		t->SetPosition(Vector3(0.0f, 5.0f, 0.0f));
+		t->SetPosition(Vector3(0.0f, 1.0f, 0.0f));
 		t->SetScale(0.2f, 0.2f, 0.2f);
 
 		Appearance* a = new Appearance();
