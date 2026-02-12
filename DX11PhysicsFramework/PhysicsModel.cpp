@@ -17,16 +17,27 @@ void PhysicsModel::Update(float deltaTime)
 
     Vector3 pos = _transform->GetPosition();
 
-    if (pos.y <= 0.5f)  
+    if (pos.y <= 0.5f)
     {
-        _useGravity = false;
+        _transform->SetPosition(Vector3(pos.x, 0.5f, pos.z)); // snap to ground
+        _velocity.y = 0; // stop downward velocity
         _useFriction = true;
+    }
+    else
+    {
+        _useGravity = true; // allow gravity above ground
+        _useFriction = false;
     }
 
     // Apply gravity force
     if (_useGravity)
     {
         AddForce(GravityForce());
+    }
+
+    if (_useFriction)
+    {
+        AddForce(FrictionForce());
     }
 
     // F = M * A ? A = F / M
@@ -54,6 +65,24 @@ Vector3 PhysicsModel::GravityForce() const
 {
     return Vector3(0.0f, -9.81f * _mass, 0.0f);
 }
+
+Vector3 PhysicsModel::FrictionForce()
+{
+    float speed = _velocity.Magnitude();
+    if (speed <= tol) return Vector3(0, 0, 0); // don't apply if almost stopped
+
+    Vector3 frictionDir = _velocity;
+    frictionDir.Normalize();
+    frictionDir.Reverse(); // opposite to current motion
+
+    const float kineticFriction = 0.6f;        // kinetic friction coefficient
+    const float gravityAcceleration = 9.81f;
+    float normalForce = _mass * gravityAcceleration;
+    float frictionMagnitude = kineticFriction * normalForce;
+
+    return frictionDir * frictionMagnitude;
+}
+
 
 
 

@@ -41,6 +41,7 @@ public:
     void SetUseGravity(bool use) { _useGravity = use; }
     bool GetUseGravity() const { return _useGravity; }
 
+    Vector3 FrictionForce();
 
 
 };
