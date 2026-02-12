@@ -42,6 +42,7 @@ public:
     bool GetUseGravity() const { return _useGravity; }
 
     Vector3 FrictionForce();
+    Vector3 DragForce();
 
 
 };

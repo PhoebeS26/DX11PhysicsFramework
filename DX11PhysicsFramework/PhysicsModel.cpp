@@ -35,6 +35,8 @@ void PhysicsModel::Update(float deltaTime)
         AddForce(GravityForce());
     }
 
+    AddForce(DragForce());
+
     if (_useFriction)
     {
         AddForce(FrictionForce());
@@ -83,6 +85,23 @@ Vector3 PhysicsModel::FrictionForce()
     return frictionDir * frictionMagnitude;
 }
 
+Vector3 PhysicsModel::DragForce() 
+{
+    float speed = _velocity.Magnitude();
+    if (speed <= tol) return Vector3(0, 0, 0);  // no drag if practically stopped
+
+    Vector3 dragDir = _velocity;
+    dragDir.Normalize();
+    dragDir.Reverse();  // opposite to velocity
+
+    const float airDensity = 1.225f;
+    const float dragCoefficient = 0.47f; // sphere-ish
+    const float area = 1.0f;
+
+    float dragMagnitude = 0.5f * airDensity * dragCoefficient * area * speed * speed;
+
+    return dragDir * dragMagnitude;
+}
 
 
 
