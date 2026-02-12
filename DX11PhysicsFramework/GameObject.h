@@ -22,6 +22,7 @@ public:
 	Transform* GetTransform() const { return _transform; }
 	Appearance* GetAppearance() const { return _appearance; }
 	PhysicsModel* GetPhysicsModel() { return _physicsModel; }
+	void SetPhysicsModel(PhysicsModel* physicsModel);
 
 
 	string GetType() const { return _type; }

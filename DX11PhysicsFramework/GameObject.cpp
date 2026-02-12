@@ -42,3 +42,11 @@ void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 	pImmediateContext->DrawIndexed(geo.numberOfIndices, 0, 0);
 
 }
+
+void GameObject::SetPhysicsModel(PhysicsModel* physicsModel)
+{
+	if (_physicsModel)
+		delete _physicsModel;
+
+	_physicsModel = physicsModel;
+}

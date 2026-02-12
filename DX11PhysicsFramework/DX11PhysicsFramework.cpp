@@ -561,6 +561,27 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 	_gameObjects.push_back(gameObject);
 
+	for (int i = 0; i < 10; i++)
+	{
+		Transform* t = new Transform();
+		t->SetPosition(Vector3(0.0f, 5.0f, 0.0f));
+		t->SetScale(0.2f, 0.2f, 0.2f);
+
+		Appearance* a = new Appearance();
+		a->SetGeometry(cubeGeometry);
+		a->SetMaterial(shinyMaterial);
+		a->SetTextureRV(_StoneTextureRV);
+
+		GameObject* particleObj = new GameObject("Particle" + to_string(i), a, t);
+
+		ParticleModel* p = new ParticleModel(t, 3.0f, Vector3(0.5f, 1.0f, 0), true);
+		particleObj->SetPhysicsModel(p);
+
+		_gameObjects.push_back(particleObj);
+	}
+
+
+
 	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
