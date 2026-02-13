@@ -102,6 +102,10 @@ Vector3 PhysicsModel::DragForce()
     return dragDir * dragMagnitude;
 }
 
+void PhysicsModel::ApplyImpulse(const Vector3& impulse)
+{
+    _velocity += impulse;
+}
 
 
 

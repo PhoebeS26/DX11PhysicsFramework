@@ -51,5 +51,6 @@ public:
     Collider* GetCollider() const { return _collider; }
     void SetCollider(Collider* collider) { _collider = collider; }
 
+    void ApplyImpulse(const Vector3& impulse);
 
 };

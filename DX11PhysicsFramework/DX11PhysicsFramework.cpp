@@ -595,13 +595,13 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		_gameObjects.push_back(particleObj);
 	}
 
-	c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
+	//c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
 	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
 	_gameObjects[1]->GetPhysicsModel()->SetUseGravity(true);
 
-	c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
+	//c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
 	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 
 
@@ -679,21 +679,24 @@ void DX11PhysicsFramework::Update()
 
 		//Debug::Print("Fixed Delta Time", FPS60);
 
+		Collider* c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
+		Collider* c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
+
 		if (c1 && c2)
 		{
-			Vector3 pos1 = c1->GetPosition();
-			Vector3 pos2 = c2->GetPosition();
-
 			if (c1->CollidesWith(c2))
 			{
-				Debug::DebugPrintF("Collision detected between object 1 and 2\n");
-			}
-			else 
-			{
-				Debug::DebugPrintF("no collision\n");
+				Debug::DebugPrintF("Collision detected!\n");
 
+				PhysicsModel* p1 = _gameObjects[1]->GetPhysicsModel();
+				PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
+
+				// TEST IMPULSE (fake bounce)
+				p1->ApplyImpulse(Vector3(-2.0f, 0, 0));
+				p2->ApplyImpulse(Vector3(2.0f, 0, 0));
 			}
 		}
+
 
 		accumulator -= FPS60;
 
