@@ -3,7 +3,8 @@
 #include "RigidBodyModel.h"
 #include "Collider.h"
 #include "Debug.h"
-#include "SphereCollider.h"   // must include this BEFORE using SphereCollider
+#include "SphereCollider.h"   
+#include "CollisionManager.h"
 
 
 #define FPS60 1.0f/60.0f
@@ -682,20 +683,16 @@ void DX11PhysicsFramework::Update()
 		Collider* c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
 		Collider* c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
 
-		if (c1 && c2)
+		if (c1 && c2 && c1->CollidesWith(c2))
 		{
-			if (c1->CollidesWith(c2))
-			{
-				Debug::DebugPrintF("Collision detected!\n");
+			Debug::DebugPrintF("Collision detected!\n");
 
-				PhysicsModel* p1 = _gameObjects[1]->GetPhysicsModel();
-				PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
+			PhysicsModel* p1 = _gameObjects[1]->GetPhysicsModel();
+			PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
 
-				// TEST IMPULSE (fake bounce)
-				p1->ApplyImpulse(Vector3(-2.0f, 0, 0));
-				p2->ApplyImpulse(Vector3(2.0f, 0, 0));
-			}
+			CollisionManager::ResolveCollision(p1, p2, 0.5f);
 		}
+
 
 
 		accumulator -= FPS60;

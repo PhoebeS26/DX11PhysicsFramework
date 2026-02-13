@@ -53,4 +53,8 @@ public:
 
     void ApplyImpulse(const Vector3& impulse);
 
+    Vector3 GetPosition() const { return _transform->GetPosition(); }
+    void SetPosition(const Vector3& pos) { _transform->SetPosition(pos); }
+    float GetInverseMass() const { return (_mass != 0.0f) ? 1.0f / _mass : 0.0f; }
+
 };
