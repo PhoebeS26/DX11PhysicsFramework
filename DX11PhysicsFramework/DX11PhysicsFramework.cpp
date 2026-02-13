@@ -1,7 +1,10 @@
 #include "DX11PhysicsFramework.h"
 #include "ParticleModel.h"
 #include "RigidBodyModel.h"
+#include "Collider.h"
 #include "Debug.h"
+#include "SphereCollider.h"   // must include this BEFORE using SphereCollider
+
 
 #define FPS60 1.0f/60.0f
 
@@ -545,14 +548,20 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		cubeAppearance->SetMaterial(shinyMaterial);
 		cubeAppearance->SetTextureRV(_StoneTextureRV);
 
-		GameObject* gameObject = new GameObject("Cube " + to_string(i), cubeAppearance, cubeTransform);
+		GameObject* gameObject = new GameObject("Cube " + std::to_string(i), cubeAppearance, cubeTransform);
 
 		// Create RigidBodyModel for the cube
 		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 1.0f); // mass = 1.0f
-		gameObject->SetPhysicsModel(rigidBody); // use your setter
+
+		// Create SphereCollider and attach it
+		SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
+		rigidBody->SetCollider(collider);
+
+		gameObject->SetPhysicsModel(rigidBody);
 
 		_gameObjects.push_back(gameObject);
 	}
+
 
 	Transform* donutTransform = new Transform();
 	donutTransform->SetScale(1.0f, 1.0f, 1.0f);
@@ -586,13 +595,13 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		_gameObjects.push_back(particleObj);
 	}
 
-
-
+	c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
 	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
 	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
 	_gameObjects[1]->GetPhysicsModel()->SetUseGravity(true);
 
+	c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
 	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 
 
@@ -656,6 +665,7 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('2')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('3')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
 		if (GetAsyncKeyState('4')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
+		if (GetAsyncKeyState('9')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(10.0f, 0, 0));
 
 		if (GetAsyncKeyState('5')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
 		if (GetAsyncKeyState('6')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
@@ -667,7 +677,23 @@ void DX11PhysicsFramework::Update()
 			gameObject->Update(FPS60);
 		}
 
-		Debug::Print("Fixed Delta Time", FPS60);
+		//Debug::Print("Fixed Delta Time", FPS60);
+
+		if (c1 && c2)
+		{
+			Vector3 pos1 = c1->GetPosition();
+			Vector3 pos2 = c2->GetPosition();
+
+			if (c1->CollidesWith(c2))
+			{
+				Debug::DebugPrintF("Collision detected between object 1 and 2\n");
+			}
+			else 
+			{
+				Debug::DebugPrintF("no collision\n");
+
+			}
+		}
 
 		accumulator -= FPS60;
 

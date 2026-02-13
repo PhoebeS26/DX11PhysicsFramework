@@ -14,7 +14,6 @@ void PhysicsModel::Update(float deltaTime)
 {
     if (!_transform) return;
 
-
     Vector3 pos = _transform->GetPosition();
 
     if (pos.y <= 0.5f)

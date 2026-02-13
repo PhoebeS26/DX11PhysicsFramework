@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "Vector3.h"
 
+class Collider;
+
 class PhysicsModel
 {
 protected:
@@ -17,6 +19,7 @@ protected:
     bool _useGravity = false;
     bool _useFriction = false;
 
+    Collider* _collider = nullptr;
 
 public:
 
@@ -43,6 +46,10 @@ public:
 
     Vector3 FrictionForce();
     Vector3 DragForce();
+
+    bool IsCollideable() const { return _collider != nullptr;  }
+    Collider* GetCollider() const { return _collider; }
+    void SetCollider(Collider* collider) { _collider = collider; }
 
 
 };

@@ -23,6 +23,8 @@ class DX11PhysicsFramework
 private:
 
 	Timer* _timer = nullptr;
+	Collider* c1 = nullptr;
+	Collider* c2 = nullptr;
 
 	int _WindowWidth = 1280;
 	int _WindowHeight = 768;
