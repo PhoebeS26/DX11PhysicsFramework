@@ -702,7 +702,7 @@ void DX11PhysicsFramework::Update()
 			PhysicsModel* p1 = _gameObjects[1]->GetPhysicsModel();
 			PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
 
-			CollisionManager::ResolveCollision(p1, p2, 0.5f);
+			CollisionManager::ResolveAABB(p1, p2, 0.5f);
 		}
 
 		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
@@ -710,7 +710,7 @@ void DX11PhysicsFramework::Update()
 
 		if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
 		{
-			Debug::DebugPrintF("Cube hit floor!\n");
+			//Debug::DebugPrintF("Cube hit floor!\n");
 
 			PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
 			if (plane)
@@ -718,8 +718,6 @@ void DX11PhysicsFramework::Update()
 				plane->ResolveCollision(_gameObjects[1]->GetPhysicsModel());
 			}
 		}
-
-
 
 		accumulator -= FPS60;
 

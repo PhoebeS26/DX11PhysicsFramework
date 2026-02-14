@@ -1,5 +1,7 @@
 #pragma once
 #include "Collider.h"
+#include "Vector3.h"
+
 
 class AABBCollider : public Collider
 {
