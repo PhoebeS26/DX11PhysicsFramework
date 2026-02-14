@@ -1,4 +1,7 @@
 #include "PhysicsModel.h"
+#include "PlaneCollider.h"
+#include "Collider.h"
+
 
 // Constructor
 PhysicsModel::PhysicsModel(Transform* transform, float mass)
@@ -10,48 +13,26 @@ PhysicsModel::PhysicsModel(Transform* transform, float mass)
     _acceleration = Vector3(0.0f, 0.0f, 0.0f);
 }
 
+
 void PhysicsModel::Update(float deltaTime)
 {
     if (!_transform) return;
+    if (_mass <= 0.0f) return; 
 
-    if (_mass <= 0.0f)
-        return;
-
-    Vector3 pos = _transform->GetPosition();
-
-    if (pos.y <= 0.5f)
-    {
-        _transform->SetPosition(Vector3(pos.x, 0.5f, pos.z));
-        _velocity.y = 0;
-        _useFriction = true;
-    }
-    else
-    {
-        _useGravity = true;
-        _useFriction = false;
-    }
-
-    // Apply gravity and other forces
-    if (_useGravity)
-        AddForce(GravityForce());
+    if (_useGravity) AddForce(GravityForce());
 
     AddForce(DragForce());
 
-    if (_useFriction)
-        AddForce(FrictionForce());
+    if (_useFriction) AddForce(FrictionForce());
 
-    // Integrate physics
-    _acceleration += _netForce / _mass;  
+    _acceleration += _netForce / _mass;
     _velocity += _acceleration * deltaTime;
+    _transform->SetPosition(_transform->GetPosition() + _velocity * deltaTime);
 
-    Vector3 position = _transform->GetPosition();
-    position += _velocity * deltaTime;
-    _transform->SetPosition(position);
-
-    // Reset forces for next frame
     _netForce = Vector3(0, 0, 0);
     _acceleration = Vector3(0, 0, 0);
 }
+
 
 
 void PhysicsModel::AddForce(const Vector3& force) 
@@ -88,7 +69,7 @@ Vector3 PhysicsModel::DragForce()
 
     Vector3 dragDir = _velocity;
     dragDir.Normalize();
-    dragDir.Reverse();  // opposite to velocity
+    dragDir.Reverse();  
 
     const float airDensity = 1.225f;
     const float dragCoefficient = 0.47f; 

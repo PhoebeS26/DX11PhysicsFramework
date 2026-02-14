@@ -28,3 +28,24 @@ bool PlaneCollider::CollidesWith(AABBCollider* aabb)
     return fabs(distToPlane) <= projectedRadius;
 }
 
+void PlaneCollider::ResolveCollision(PhysicsModel* objPhysics)
+{
+    Vector3 pos = objPhysics->GetPosition();
+    Vector3 vel = objPhysics->GetVelocity();
+
+    float distToPlane = (pos * normal) - distance;
+
+    if (distToPlane < 0.0f) 
+    {
+  
+        pos += normal * (-distToPlane);
+        objPhysics->SetPosition(pos);
+
+        float vn = vel * normal; 
+        if (vn < 0.0f) 
+        {
+            vel -= normal * vn; 
+            objPhysics->SetVelocity(vel);
+        }
+    }
+}

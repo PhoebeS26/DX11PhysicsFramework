@@ -1,5 +1,7 @@
 #pragma once
 #include "Collider.h"
+#include "PhysicsModel.h"
+
 
 class PlaneCollider : public Collider
 {
@@ -7,10 +9,10 @@ class PlaneCollider : public Collider
     float distance;
 
 public:
-    PlaneCollider(Transform* tf, Vector3 n, float d)
-        : Collider(tf), normal(n), distance(d)
+
+    PlaneCollider(Transform* tf, Vector3 n, float d) : Collider(tf), normal(n), distance(d)
     {
-        normal.Normalize(); // use YOUR normalize
+        normal.Normalize(); 
     }
 
     bool CollidesWith(Collider* other) override { return other->CollidesWith(this); }
@@ -21,4 +23,7 @@ public:
 
     Vector3 GetNormal() const { return normal; }
     float GetDistance() const { return distance; }
+
+    void ResolveCollision(PhysicsModel* objPhysics);
+
 };

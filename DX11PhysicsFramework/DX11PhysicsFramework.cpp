@@ -539,7 +539,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 	GameObject* gameObject = new GameObject("Floor", floorAppearance, floorTransform);
 
 	RigidBodyModel* floorBody = new RigidBodyModel(floorTransform, 0.0f);
-	PlaneCollider* floorCollider = new PlaneCollider(floorTransform, Vector3(0, 1, 0), 0.0f);
+	PlaneCollider* floorCollider = new PlaneCollider(floorTransform, Vector3(0, 1, 0), 1.0f);
 	floorBody->SetCollider(floorCollider);
 
 	gameObject->SetPhysicsModel(floorBody);
@@ -711,6 +711,12 @@ void DX11PhysicsFramework::Update()
 		if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
 		{
 			Debug::DebugPrintF("Cube hit floor!\n");
+
+			PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
+			if (plane)
+			{
+				plane->ResolveCollision(_gameObjects[1]->GetPhysicsModel());
+			}
 		}
 
 
