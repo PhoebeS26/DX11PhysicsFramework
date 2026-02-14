@@ -370,6 +370,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABBCollider.cpp" />
     <ClCompile Include="Appearance.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -393,6 +394,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABBCollider.h" />
     <ClInclude Include="Appearance.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />

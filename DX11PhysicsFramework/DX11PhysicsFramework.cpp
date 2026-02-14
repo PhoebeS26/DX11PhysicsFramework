@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "Debug.h"
 #include "SphereCollider.h"   
+#include "AABBCollider.h"
 #include "CollisionManager.h"
 
 
@@ -557,6 +558,10 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		// Create SphereCollider and attach it
 		SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
 		rigidBody->SetCollider(collider);
+
+		//Vector3 halfExtents(0.5f, 0.5f, 0.5f); // match cube scale
+		//AABBCollider* collider = new AABBCollider(cubeTransform, halfExtents);
+		//rigidBody->SetCollider(collider);
 
 		gameObject->SetPhysicsModel(rigidBody);
 
