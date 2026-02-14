@@ -1,5 +1,6 @@
 #include "AABBCollider.h"
 #include "SphereCollider.h"
+#include "PlaneCollider.h"
 #include <algorithm>
 
 // AABB vs AABB
@@ -35,4 +36,9 @@ bool AABBCollider::CollidesWith(SphereCollider* other)
     Vector3 closestPoint(x, y, z);
     Vector3 diff = spherePos - closestPoint;
     return diff.Magnitude() < radius;
+}
+
+bool AABBCollider::CollidesWith(PlaneCollider* plane)
+{
+    return plane->CollidesWith(this);
 }

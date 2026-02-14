@@ -14,48 +14,45 @@ void PhysicsModel::Update(float deltaTime)
 {
     if (!_transform) return;
 
+    if (_mass <= 0.0f)
+        return;
+
     Vector3 pos = _transform->GetPosition();
 
     if (pos.y <= 0.5f)
     {
         _transform->SetPosition(Vector3(pos.x, 0.5f, pos.z));
-        _velocity.y = 0; 
+        _velocity.y = 0;
         _useFriction = true;
     }
     else
     {
-        _useGravity = true; 
+        _useGravity = true;
         _useFriction = false;
     }
 
-    // Apply gravity force
+    // Apply gravity and other forces
     if (_useGravity)
-    {
         AddForce(GravityForce());
-    }
 
     AddForce(DragForce());
 
     if (_useFriction)
-    {
         AddForce(FrictionForce());
-    }
 
-    // F = M * A ? A = F / M
-    _acceleration += _netForce / _mass;
-
-    // Velocity update
+    // Integrate physics
+    _acceleration += _netForce / _mass;  
     _velocity += _acceleration * deltaTime;
 
-    // Position update
     Vector3 position = _transform->GetPosition();
     position += _velocity * deltaTime;
     _transform->SetPosition(position);
 
-    // Reset per frame
+    // Reset forces for next frame
     _netForce = Vector3(0, 0, 0);
     _acceleration = Vector3(0, 0, 0);
 }
+
 
 void PhysicsModel::AddForce(const Vector3& force) 
 {

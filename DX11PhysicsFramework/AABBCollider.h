@@ -11,6 +11,8 @@ public:
     bool CollidesWith(Collider* other) override { return other->CollidesWith(this); }
     bool CollidesWith(SphereCollider* other) override;
     bool CollidesWith(AABBCollider* other) override;
+    bool CollidesWith(PlaneCollider* other) override;
+
 
     Vector3 GetHalfExtents() const { return halfExtents; }
 };

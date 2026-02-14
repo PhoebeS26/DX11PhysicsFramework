@@ -6,6 +6,7 @@
 #include "SphereCollider.h"   
 #include "AABBCollider.h"
 #include "CollisionManager.h"
+#include "PlaneCollider.h"
 
 
 #define FPS60 1.0f/60.0f
@@ -537,6 +538,12 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 	GameObject* gameObject = new GameObject("Floor", floorAppearance, floorTransform);
 
+	RigidBodyModel* floorBody = new RigidBodyModel(floorTransform, 0.0f);
+	PlaneCollider* floorCollider = new PlaneCollider(floorTransform, Vector3(0, 1, 0), 0.0f);
+	floorBody->SetCollider(floorCollider);
+
+	gameObject->SetPhysicsModel(floorBody);
+
 	_gameObjects.push_back(gameObject);
 
 	for (auto i = 0; i < 4; i++)
@@ -559,7 +566,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		//SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
 		//rigidBody->SetCollider(collider);
 
-		Vector3 halfExtents(0.5f, 0.5f, 0.5f); 
+		Vector3 halfExtents(1.0f, 1.0f, 1.0f); 
 		AABBCollider* collider = new AABBCollider(cubeTransform, halfExtents);
 		rigidBody->SetCollider(collider);
 
@@ -696,6 +703,14 @@ void DX11PhysicsFramework::Update()
 			PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
 
 			CollisionManager::ResolveCollision(p1, p2, 0.5f);
+		}
+
+		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
+		Collider* cubeCollider = _gameObjects[1]->GetPhysicsModel()->GetCollider();
+
+		if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
+		{
+			Debug::DebugPrintF("Cube hit floor!\n");
 		}
 
 
