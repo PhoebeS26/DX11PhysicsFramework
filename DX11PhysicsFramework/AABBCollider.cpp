@@ -1,20 +1,17 @@
 #include "AABBCollider.h"
+#include "SphereCollider.h"
 #include <algorithm>
 
 // AABB vs AABB
-bool AABBCollider::CollidesWith(Collider* other)
+bool AABBCollider::CollidesWith(AABBCollider* other)
 {
-    AABBCollider* aabbOther = dynamic_cast<AABBCollider*>(other);
-    if (!aabbOther) return false;
-
-    // Compute min/max dynamically from current transforms
     Vector3 posA = _tf->GetPosition();
-    Vector3 posB = aabbOther->_tf->GetPosition();
+    Vector3 posB = other->_tf->GetPosition();
 
     Vector3 minA = posA - halfExtents;
     Vector3 maxA = posA + halfExtents;
-    Vector3 minB = posB - aabbOther->halfExtents;
-    Vector3 maxB = posB + aabbOther->halfExtents;
+    Vector3 minB = posB - other->GetHalfExtents();
+    Vector3 maxB = posB + other->GetHalfExtents();
 
     return (minA.x <= maxB.x && maxA.x >= minB.x) &&
         (minA.y <= maxB.y && maxA.y >= minB.y) &&

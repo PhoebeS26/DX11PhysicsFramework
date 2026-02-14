@@ -556,12 +556,12 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 1.0f); // mass = 1.0f
 
 		// Create SphereCollider and attach it
-		SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
-		rigidBody->SetCollider(collider);
-
-		//Vector3 halfExtents(0.5f, 0.5f, 0.5f); // match cube scale
-		//AABBCollider* collider = new AABBCollider(cubeTransform, halfExtents);
+		//SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
 		//rigidBody->SetCollider(collider);
+
+		Vector3 halfExtents(0.5f, 0.5f, 0.5f); 
+		AABBCollider* collider = new AABBCollider(cubeTransform, halfExtents);
+		rigidBody->SetCollider(collider);
 
 		gameObject->SetPhysicsModel(rigidBody);
 
