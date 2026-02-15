@@ -560,7 +560,8 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		GameObject* gameObject = new GameObject("Cube " + std::to_string(i), cubeAppearance, cubeTransform);
 
 		// Create RigidBodyModel for the cube
-		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 1.0f); // mass = 1.0f
+		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 0.0f); // mass = 1.0f
+		rigidBody->SetMass(1.0f);
 
 		// Create SphereCollider and attach it
 		//SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5

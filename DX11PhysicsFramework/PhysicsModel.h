@@ -37,7 +37,7 @@ public:
     void SetUseAcceleration(bool useAccel) { _useAcceleration = useAccel; }
     bool GetUseAcceleration() const { return _useAcceleration; }
 
-    void SetMass(float mass) { _mass = mass; }
+    virtual void SetMass(float mass) { _mass = mass; }
     float GetMass() const { return _mass; }
 
     Vector3 GravityForce() const;
