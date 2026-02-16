@@ -679,12 +679,13 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('2')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('3')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
 		if (GetAsyncKeyState('4')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
-		if (GetAsyncKeyState('9')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(10.0f, 0, 0));
+		if (GetAsyncKeyState('5')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(10.0f, 0, 0));
+		if (GetAsyncKeyState('6')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(-10.0f, 0, 0));
 
-		if (GetAsyncKeyState('5')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
-		if (GetAsyncKeyState('6')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
-		if (GetAsyncKeyState('7')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
-		if (GetAsyncKeyState('8')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
+		if (GetAsyncKeyState('7')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
+		if (GetAsyncKeyState('8')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
+		if (GetAsyncKeyState('9')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
+		if (GetAsyncKeyState('0')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
 		for (auto gameObject : _gameObjects)
 		{

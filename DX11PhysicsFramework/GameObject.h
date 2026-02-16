@@ -22,15 +22,13 @@ public:
 	Transform* GetTransform() const { return _transform; }
 	Appearance* GetAppearance() const { return _appearance; }
 	PhysicsModel* GetPhysicsModel() { return _physicsModel; }
-	void SetPhysicsModel(PhysicsModel* physicsModel);
 
 
 	string GetType() const { return _type; }
-
 	void SetParent(GameObject * parent) { _parent = parent; }
-
 	void Update(float dt);
 	void Draw(ID3D11DeviceContext * pImmediateContext);
+	void SetPhysicsModel(PhysicsModel* physicsModel);
 
 private:
 
