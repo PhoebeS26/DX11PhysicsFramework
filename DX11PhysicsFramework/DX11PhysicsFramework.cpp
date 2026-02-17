@@ -618,6 +618,9 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 			p->SetAcceleration(Vector3(0.0f, 0.0f, 0.0f));
 			p->SetUseAcceleration(false);
 			p->SetUseGravity(true);
+
+			p->SetUseFriction(true);
+			p->SetGrounded(true);
 		}
 	}
 
@@ -675,7 +678,7 @@ void DX11PhysicsFramework::Update()
 
 	static float accumulator = 0.0f;
 	accumulator += deltaTime;
-
+	
 	while (accumulator >= FPS60)
 	{
 		// === INPUT FOR CUBE 1 ===
@@ -692,10 +695,36 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('9')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
 		if (GetAsyncKeyState('0')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
+		// === FLOOR COLLISIONS (All cubes) ===
+		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
+
+		for (int i = 1; i <= 4; i++)
+		{
+			PhysicsModel* p = _gameObjects[i]->GetPhysicsModel();
+			if (!p) continue;
+
+			// Reset grounded state first
+			p->SetGrounded(false);
+
+			// Simple floor check
+			Vector3 pos = p->GetPosition();
+			if (pos.y <= 1.0f) // floor height
+			{
+				p->SetGrounded(true);
+			}
+
+			// Optional: resolve collision with plane
+			PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
+			if (plane)
+			{
+				plane->ResolveCollision(p);
+			}
+		}
+
 		// === UPDATE ALL OBJECTS ===
 		for (auto gameObject : _gameObjects)
 		{
-			gameObject->Update(FPS60);
+			gameObject->Update(FPS60); // friction + gravity handled inside
 		}
 
 		// === CUBE VS CUBE COLLISIONS ===
@@ -710,25 +739,7 @@ void DX11PhysicsFramework::Update()
 				{
 					PhysicsModel* p1 = _gameObjects[i]->GetPhysicsModel();
 					PhysicsModel* p2 = _gameObjects[j]->GetPhysicsModel();
-
 					CollisionManager::ResolveAABB(p1, p2, 0.5f);
-				}
-			}
-		}
-
-		// === FLOOR COLLISIONS (ALL CUBES) ===
-		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
-
-		for (int i = 1; i <= 4; i++)
-		{
-			Collider* cubeCollider = _gameObjects[i]->GetPhysicsModel()->GetCollider();
-
-			if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
-			{
-				PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
-				if (plane)
-				{
-					plane->ResolveCollision(_gameObjects[i]->GetPhysicsModel());
 				}
 			}
 		}

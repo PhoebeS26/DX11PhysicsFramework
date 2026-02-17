@@ -35,17 +35,30 @@ void PlaneCollider::ResolveCollision(PhysicsModel* objPhysics)
 
     float distToPlane = (pos * normal) - distance;
 
-    if (distToPlane < 0.0f) 
+    if (distToPlane < 0.0f)
     {
-  
-        pos += normal * (-distToPlane);
+        // Push object out of plane
+        pos -= normal * distToPlane;
         objPhysics->SetPosition(pos);
 
-        float vn = vel * normal; 
-        if (vn < 0.0f) 
+        float vn = vel * normal;
+
+        if (vn < 0.0f)
         {
-            vel -= normal * vn; 
+            float restitution = 0.2f; // 0 = no bounce, 1 = full bounce
+
+            Vector3 normalVel = normal * vn;
+            Vector3 tangentVel = vel - normalVel;
+
+            // Bounce only on normal axis
+            normalVel *= -restitution;
+
+            vel = tangentVel + normalVel;
+
             objPhysics->SetVelocity(vel);
         }
+
+        objPhysics->SetGrounded(true);
+
     }
 }
