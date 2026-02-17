@@ -28,7 +28,9 @@ void PhysicsModel::Update(float deltaTime)
         AddForce(GravityForce());
 
     // === Apply Drag / Air Resistance ===
-    AddForce(DragForce());
+    if (_useDrag)
+        AddForce(DragForce());
+    //AddForce(DragForce());
 
     // === Apply Friction only if grounded ===
     if (_useFriction && _isGrounded)

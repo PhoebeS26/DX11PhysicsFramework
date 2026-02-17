@@ -621,6 +621,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 			p->SetUseFriction(true);
 			p->SetGrounded(true);
+			p->SetUseDrag(true);
 		}
 	}
 

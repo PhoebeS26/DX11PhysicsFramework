@@ -19,6 +19,7 @@ protected:
     bool _useGravity = false;
     bool _useFriction = false;
     bool _isGrounded;
+    bool _useDrag = false;
 
     Collider* _collider = nullptr;
 
@@ -50,6 +51,9 @@ public:
     void SetUseFriction(bool use) { _useFriction = use; }
     bool GetUseFriction() const { return _useFriction; }
     Vector3 FrictionForce();
+
+    void SetUseDrag(bool use) { _useDrag = use; }
+    bool GetUseDrag() const { return _useDrag; }
     Vector3 DragForce();
 
     bool IsCollideable() const { return _collider != nullptr;  }
