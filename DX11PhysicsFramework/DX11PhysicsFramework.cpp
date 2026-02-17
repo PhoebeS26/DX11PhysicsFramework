@@ -609,14 +609,18 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		_gameObjects.push_back(particleObj);
 	}
 
-	//c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
-	_gameObjects[1]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
-	_gameObjects[1]->GetPhysicsModel()->SetAcceleration(Vector3(0.0f, 0.5f, 0.0f));
-	_gameObjects[1]->GetPhysicsModel()->SetUseAcceleration(false);
-	_gameObjects[1]->GetPhysicsModel()->SetUseGravity(true);
+	for (int i = 1; i <= 4; i++)
+	{
+		PhysicsModel* p = _gameObjects[i]->GetPhysicsModel();
+		if (p)
+		{
+			p->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
+			p->SetAcceleration(Vector3(0.0f, 0.0f, 0.0f));
+			p->SetUseAcceleration(false);
+			p->SetUseGravity(true);
+		}
+	}
 
-	//c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
-	_gameObjects[2]->GetPhysicsModel()->SetVelocity(Vector3(0.0f, 0.0f, 0.0f));
 
 
 	return S_OK;
@@ -674,7 +678,7 @@ void DX11PhysicsFramework::Update()
 
 	while (accumulator >= FPS60)
 	{
-		// Move GameObjects
+		// === INPUT FOR CUBE 1 ===
 		if (GetAsyncKeyState('1')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
 		if (GetAsyncKeyState('2')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('3')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
@@ -682,47 +686,54 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('5')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(10.0f, 0, 0));
 		if (GetAsyncKeyState('6')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(-10.0f, 0, 0));
 
+		// === INPUT FOR CUBE 2 ===
 		if (GetAsyncKeyState('7')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
 		if (GetAsyncKeyState('8')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('9')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
 		if (GetAsyncKeyState('0')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
+		// === UPDATE ALL OBJECTS ===
 		for (auto gameObject : _gameObjects)
 		{
 			gameObject->Update(FPS60);
 		}
 
-		//Debug::Print("Fixed Delta Time", FPS60);
-
-		Collider* c1 = _gameObjects[1]->GetPhysicsModel()->GetCollider();
-		Collider* c2 = _gameObjects[2]->GetPhysicsModel()->GetCollider();
-
-		if (c1 && c2 && c1->CollidesWith(c2))
+		// === CUBE VS CUBE COLLISIONS ===
+		for (int i = 1; i <= 4; i++)
 		{
-			Debug::DebugPrintF("Collision detected!\n");
+			for (int j = i + 1; j <= 4; j++)
+			{
+				Collider* c1 = _gameObjects[i]->GetPhysicsModel()->GetCollider();
+				Collider* c2 = _gameObjects[j]->GetPhysicsModel()->GetCollider();
 
-			PhysicsModel* p1 = _gameObjects[1]->GetPhysicsModel();
-			PhysicsModel* p2 = _gameObjects[2]->GetPhysicsModel();
+				if (c1 && c2 && c1->CollidesWith(c2))
+				{
+					PhysicsModel* p1 = _gameObjects[i]->GetPhysicsModel();
+					PhysicsModel* p2 = _gameObjects[j]->GetPhysicsModel();
 
-			CollisionManager::ResolveAABB(p1, p2, 0.5f);
+					CollisionManager::ResolveAABB(p1, p2, 0.5f);
+				}
+			}
 		}
 
+		// === FLOOR COLLISIONS (ALL CUBES) ===
 		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
-		Collider* cubeCollider = _gameObjects[1]->GetPhysicsModel()->GetCollider();
 
-		if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
+		for (int i = 1; i <= 4; i++)
 		{
-			//Debug::DebugPrintF("Cube hit floor!\n");
+			Collider* cubeCollider = _gameObjects[i]->GetPhysicsModel()->GetCollider();
 
-			PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
-			if (plane)
+			if (floorCollider && cubeCollider && cubeCollider->CollidesWith(floorCollider))
 			{
-				plane->ResolveCollision(_gameObjects[1]->GetPhysicsModel());
+				PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
+				if (plane)
+				{
+					plane->ResolveCollision(_gameObjects[i]->GetPhysicsModel());
+				}
 			}
 		}
 
 		accumulator -= FPS60;
-
 	}
 
 	// Update camera position 
