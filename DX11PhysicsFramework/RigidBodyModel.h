@@ -4,6 +4,7 @@
 class RigidBodyModel : public PhysicsModel
 {
 public:
+
     RigidBodyModel(Transform* transform, float mass = 1.0f);
 
     void SetMass(float mass) override;
@@ -12,5 +13,6 @@ public:
     void CalculateAngularVelocity(float deltaTime); 
 
 private:
+
     void RecalculateInertia(); 
 };

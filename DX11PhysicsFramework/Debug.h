@@ -28,7 +28,7 @@ public:
         OutputDebugStringA(buffer);
     }
 
-    // String with vector3
+    // String with Vector3
     static void Print(const std::string& label, const Vector3& vec)
     {
         char buffer[128];

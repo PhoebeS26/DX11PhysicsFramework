@@ -4,6 +4,7 @@
 
 class Collider;
 
+// Base class for physics objects
 class PhysicsModel
 {
 protected:
@@ -21,13 +22,13 @@ protected:
     bool _isGrounded;
     bool _useDrag = false;
 
-    Collider* _collider = nullptr;
+    Collider* _collider = nullptr; 
 
 public:
 
-    PhysicsModel(Transform* transform, float mass);   
+    PhysicsModel(Transform* transform, float mass);
 
-    virtual void Update(float deltaTime);      
+    virtual void Update(float deltaTime);
     void AddForce(const Vector3& force);
 
     Vector3 GetVelocity() const { return _velocity; }
@@ -42,28 +43,26 @@ public:
     virtual void SetMass(float mass) { _mass = mass; }
     float GetMass() const { return _mass; }
 
-    Vector3 GravityForce() const;
+    Vector3 GravityForce() const; 
     void SetUseGravity(bool use) { _useGravity = use; }
     bool GetUseGravity() const { return _useGravity; }
     void SetGrounded(bool grounded) { _isGrounded = grounded; }
 
-
     void SetUseFriction(bool use) { _useFriction = use; }
     bool GetUseFriction() const { return _useFriction; }
-    Vector3 FrictionForce();
+    Vector3 FrictionForce(); 
 
     void SetUseDrag(bool use) { _useDrag = use; }
     bool GetUseDrag() const { return _useDrag; }
-    Vector3 DragForce();
+    Vector3 DragForce(); 
 
-    bool IsCollideable() const { return _collider != nullptr;  }
+    bool IsCollideable() const { return _collider != nullptr; }
     Collider* GetCollider() const { return _collider; }
     void SetCollider(Collider* collider) { _collider = collider; }
 
-    void ApplyImpulse(const Vector3& impulse);
+    void ApplyImpulse(const Vector3& impulse); 
 
     Vector3 GetPosition() const { return _transform->GetPosition(); }
     void SetPosition(const Vector3& pos) { _transform->SetPosition(pos); }
     float GetInverseMass() const { return (_mass != 0.0f) ? 1.0f / _mass : 0.0f; }
-
 };

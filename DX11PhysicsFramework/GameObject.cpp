@@ -1,10 +1,13 @@
 #include "GameObject.h"
 
-GameObject::GameObject(string type,  Appearance* appearance, Transform* transform ) : _type(type), _appearance(appearance), _transform(transform)
+GameObject::GameObject(string type, Appearance* appearance, Transform* transform)
+	: _type(type), _appearance(appearance), _transform(transform)
 {
 	_parent = nullptr;
 	_transform = transform;
 	_appearance = appearance;
+
+	// Default physics model (mass = 1)
 	_physicsModel = new PhysicsModel(_transform, 1.0f);
 }
 
@@ -21,18 +24,18 @@ GameObject::~GameObject()
 
 void GameObject::Update(float dt)
 {
-	if (_physicsModel) 
+	if (_physicsModel)
 	{
 		_physicsModel->Update(dt);
 	}
 
-	if (_transform) 
+	if (_transform)
 	{
 		_transform->UpdateWorldMatrix();
 	}
 }
 
-void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
+void GameObject::Draw(ID3D11DeviceContext* pImmediateContext)
 {
 	Geometry geo = _appearance->GetGeometry();
 
@@ -40,13 +43,14 @@ void GameObject::Draw(ID3D11DeviceContext * pImmediateContext)
 	pImmediateContext->IASetIndexBuffer(geo.indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
 	pImmediateContext->DrawIndexed(geo.numberOfIndices, 0, 0);
-
 }
 
 void GameObject::SetPhysicsModel(PhysicsModel* physicsModel)
 {
 	if (_physicsModel)
+	{
 		delete _physicsModel;
+	}
 
 	_physicsModel = physicsModel;
 }

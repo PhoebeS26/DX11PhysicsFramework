@@ -559,13 +559,8 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 		GameObject* gameObject = new GameObject("Cube " + std::to_string(i), cubeAppearance, cubeTransform);
 
-		// Create RigidBodyModel for the cube
-		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 0.0f); // mass = 1.0f
+		RigidBodyModel* rigidBody = new RigidBodyModel(cubeTransform, 0.0f); 
 		rigidBody->SetMass(1.0f);
-
-		// Create SphereCollider and attach it
-		//SphereCollider* collider = new SphereCollider(cubeTransform, 0.5f); // radius = 0.5
-		//rigidBody->SetCollider(collider);
 
 		Vector3 halfExtents(1.0f, 1.0f, 1.0f); 
 		AABBCollider* collider = new AABBCollider(cubeTransform, halfExtents);
@@ -575,7 +570,6 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 
 		_gameObjects.push_back(gameObject);
 	}
-
 
 	Transform* donutTransform = new Transform();
 	donutTransform->SetScale(1.0f, 1.0f, 1.0f);
@@ -609,6 +603,7 @@ HRESULT DX11PhysicsFramework::InitRunTimeData()
 		_gameObjects.push_back(particleObj);
 	}
 
+	// Init forces
 	for (int i = 1; i <= 4; i++)
 	{
 		PhysicsModel* p = _gameObjects[i]->GetPhysicsModel();
@@ -682,7 +677,7 @@ void DX11PhysicsFramework::Update()
 	
 	while (accumulator >= FPS60)
 	{
-		// === INPUT FOR CUBE 1 ===
+		// Cube 1 input
 		if (GetAsyncKeyState('1')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
 		if (GetAsyncKeyState('2')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('3')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
@@ -690,13 +685,13 @@ void DX11PhysicsFramework::Update()
 		if (GetAsyncKeyState('5')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(10.0f, 0, 0));
 		if (GetAsyncKeyState('6')) _gameObjects[1]->GetPhysicsModel()->AddForce(Vector3(-10.0f, 0, 0));
 
-		// === INPUT FOR CUBE 2 ===
+		// Cube 2 input
 		if (GetAsyncKeyState('7')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, -10.0f));
 		if (GetAsyncKeyState('8')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 0, 10.0f));
 		if (GetAsyncKeyState('9')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, 10.0f, 0));
 		if (GetAsyncKeyState('0')) _gameObjects[2]->GetPhysicsModel()->AddForce(Vector3(0, -10.0f, 0));
 
-		// === FLOOR COLLISIONS (All cubes) ===
+		// floor collision
 		Collider* floorCollider = _gameObjects[0]->GetPhysicsModel()->GetCollider();
 
 		for (int i = 1; i <= 4; i++)
@@ -704,17 +699,14 @@ void DX11PhysicsFramework::Update()
 			PhysicsModel* p = _gameObjects[i]->GetPhysicsModel();
 			if (!p) continue;
 
-			// Reset grounded state first
 			p->SetGrounded(false);
 
-			// Simple floor check
 			Vector3 pos = p->GetPosition();
 			if (pos.y <= 1.0f) // floor height
 			{
 				p->SetGrounded(true);
 			}
 
-			// Optional: resolve collision with plane
 			PlaneCollider* plane = dynamic_cast<PlaneCollider*>(floorCollider);
 			if (plane)
 			{
@@ -722,13 +714,11 @@ void DX11PhysicsFramework::Update()
 			}
 		}
 
-		// === UPDATE ALL OBJECTS ===
 		for (auto gameObject : _gameObjects)
 		{
-			gameObject->Update(FPS60); // friction + gravity handled inside
+			gameObject->Update(FPS60); 
 		}
 
-		// === CUBE VS CUBE COLLISIONS ===
 		for (int i = 1; i <= 4; i++)
 		{
 			for (int j = i + 1; j <= 4; j++)

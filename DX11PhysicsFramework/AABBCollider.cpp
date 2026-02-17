@@ -38,6 +38,7 @@ bool AABBCollider::CollidesWith(SphereCollider* other)
     return diff.Magnitude() < radius;
 }
 
+// AABB vs Plane
 bool AABBCollider::CollidesWith(PlaneCollider* plane)
 {
     return plane->CollidesWith(this);

@@ -6,6 +6,7 @@ class SphereCollider : public Collider
     float radius = 1.0f;
 
 public:
+
     SphereCollider(Transform* tf, float r) : Collider(tf), radius(r) {}
 
     bool CollidesWith(Collider* other) override { return other->CollidesWith(this); }

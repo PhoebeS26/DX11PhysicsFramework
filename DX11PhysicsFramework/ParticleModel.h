@@ -4,6 +4,7 @@
 class ParticleModel : public PhysicsModel
 {
 public:
+
     // Default constructor
     ParticleModel(Transform* transform);
 

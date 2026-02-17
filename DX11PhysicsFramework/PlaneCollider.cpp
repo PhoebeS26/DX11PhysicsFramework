@@ -19,10 +19,7 @@ bool PlaneCollider::CollidesWith(AABBCollider* aabb)
     Vector3 center = aabb->GetPosition();
     Vector3 he = aabb->GetHalfExtents();
 
-    float projectedRadius =
-        he.x * fabs(normal.x) +
-        he.y * fabs(normal.y) +
-        he.z * fabs(normal.z);
+    float projectedRadius = he.x * fabs(normal.x) + he.y * fabs(normal.y) + he.z * fabs(normal.z);
 
     float distToPlane = (center * normal) - distance; 
     return fabs(distToPlane) <= projectedRadius;

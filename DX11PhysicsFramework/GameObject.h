@@ -8,9 +8,17 @@
 #include "PhysicsModel.h"
 
 
+#pragma once
+
+#include <directxmath.h>
+#include <d3d11_1.h>
+#include <string>
+#include "Transform.h"
+#include "Appearance.h"
+#include "PhysicsModel.h"
+
 using namespace DirectX;
 using namespace std;
-
 
 class GameObject
 {
@@ -23,11 +31,13 @@ public:
 	Appearance* GetAppearance() const { return _appearance; }
 	PhysicsModel* GetPhysicsModel() { return _physicsModel; }
 
-
 	string GetType() const { return _type; }
-	void SetParent(GameObject * parent) { _parent = parent; }
+
+	void SetParent(GameObject* parent) { _parent = parent; }
+
 	void Update(float dt);
-	void Draw(ID3D11DeviceContext * pImmediateContext);
+	void Draw(ID3D11DeviceContext* pImmediateContext);
+
 	void SetPhysicsModel(PhysicsModel* physicsModel);
 
 private:
@@ -38,6 +48,5 @@ private:
 	PhysicsModel* _physicsModel;
 
 	string _type;
-
 };
 

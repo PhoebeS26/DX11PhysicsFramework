@@ -17,47 +17,54 @@ PhysicsModel::PhysicsModel(Transform* transform, float mass)
     _useFriction = true;
 }
 
-// ================= UPDATE =================
 void PhysicsModel::Update(float deltaTime)
 {
-    if (!_transform) return;
-    if (_mass <= 0.0f) return;
+    if (!_transform)
+    {
+        return;
+    }
+    if (_mass <= 0.0f)
+    {
+        return;
+    }
 
-    // === Apply Gravity ===
+    // Apply gravity if enabled
     if (_useGravity)
+    {
         AddForce(GravityForce());
+    }
 
-    // === Apply Drag / Air Resistance ===
+    // Apply drag / air resistance if enabled
     if (_useDrag)
+    {
         AddForce(DragForce());
-    //AddForce(DragForce());
+    }
 
-    // === Apply Friction only if grounded ===
+    // Apply friction if grounded
     if (_useFriction && _isGrounded)
     {
-        // FrictionForce() returns a force vector
         AddForce(FrictionForce());
     }
 
-    // === Integrate Acceleration ===
-    _acceleration += _netForce / _mass;       // a = F/m
-    _velocity += _acceleration * deltaTime;   // v = v + a*dt
+    // Integrate acceleration
+    _acceleration += _netForce / _mass;
+    _velocity += _acceleration * deltaTime;
 
-    // === Prevent tiny jitter for friction ===
+    // Stop tiny jitter from friction
     const float velTol = 0.001f;
     if (_velocity.Magnitude() < velTol)
+    {
         _velocity = Vector3(0, 0, 0);
+    }
 
-    // === Update Position ===
+    // Update position
     _transform->SetPosition(_transform->GetPosition() + _velocity * deltaTime);
 
-    // === Reset forces / acceleration for next frame ===
+    // Reset forces / acceleration for next frame
     _netForce = Vector3(0, 0, 0);
     _acceleration = Vector3(0, 0, 0);
 }
 
-
-// ================= FORCES =================
 void PhysicsModel::AddForce(const Vector3& force)
 {
     _netForce += force;
@@ -70,24 +77,22 @@ Vector3 PhysicsModel::GravityForce() const
 
 Vector3 PhysicsModel::FrictionForce()
 {
-    // ===== DEBUG: show every call =====
     float speed = _velocity.Magnitude();
-    Debug::DebugPrintF("FrictionForce called | grounded: %d, speed: %f\n", _isGrounded, speed);
 
-    // only apply friction if grounded
     if (!_isGrounded)
+    {
         return Vector3(0, 0, 0);
+    }
 
-    const float tol = 0.01f; // small velocity threshold to avoid jitter
+    const float tol = 0.01f;
     if (speed <= tol)
     {
-        Debug::DebugPrintF("FrictionForce skipped due to low speed\n");
         return Vector3(0, 0, 0);
     }
 
     Vector3 frictionDir = _velocity;
     frictionDir.Normalize();
-    frictionDir.Reverse(); // opposite to motion
+    frictionDir.Reverse(); 
 
     const float kineticFriction = 0.6f;
     const float gravityAccel = 9.81f;
@@ -95,22 +100,23 @@ Vector3 PhysicsModel::FrictionForce()
     float normalForce = _mass * gravityAccel;
     float frictionMag = kineticFriction * normalForce;
 
-    // prevent over-correction for low speeds
-    if (frictionMag * 0.016f > speed) // assuming deltaTime ~ 0.016
+    // prevent overcorrection for low speeds
+    if (frictionMag * 0.016f > speed)
+    {
         frictionMag = speed / 0.016f;
+    }
 
-    Debug::DebugPrintF("Friction applied | frictionMag: %f, direction: (%f,%f,%f)\n",
-        frictionMag, frictionDir.x, frictionDir.y, frictionDir.z);
 
     return frictionDir * frictionMag;
 }
 
-
-
 Vector3 PhysicsModel::DragForce()
 {
     float speed = _velocity.Magnitude();
-    if (speed <= tol) return Vector3(0, 0, 0);
+    if (speed <= tol)
+    {
+        return Vector3(0, 0, 0);
+    }
 
     Vector3 dragDir = _velocity;
     dragDir.Normalize();
@@ -125,7 +131,6 @@ Vector3 PhysicsModel::DragForce()
     return dragDir * dragMag;
 }
 
-// ================= IMPULSE =================
 void PhysicsModel::ApplyImpulse(const Vector3& impulse)
 {
     _velocity += impulse;
