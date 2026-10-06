@@ -17,6 +17,11 @@ The project includes work with:
 
 The project was developed to gain practical experience with physics programming, graphics programming and the systems involved in a real-time simulation.
 
+## Controls
+
+* **Number keys (1–9)** — Control the corresponding cubes
+* **Note:** Use the number keys above the letters, not the numeric keypad.
+
 ## Technologies
 
 * **C++**
